@@ -4,7 +4,7 @@ import org.mapstruct.Named;
 
 public class MaskCardNumber {
     @Named("mask")
-    public String maskCardNumber(String cardNumber) {
+    public static String maskCardNumber(String cardNumber) {
         return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
     }
 }
