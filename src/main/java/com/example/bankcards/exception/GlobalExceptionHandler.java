@@ -24,6 +24,8 @@ public class GlobalExceptionHandler {
         return buildResponse(ex.getMessage(), "USER_ALREADY_EXISTS", HttpStatus.CONFLICT);
     }
 
+
+
     @ExceptionHandler(CardNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCardNotFound(CardNotFoundException ex) {
         return buildResponse(ex.getMessage(), "CARD_NOT_FOUND", HttpStatus.NOT_FOUND);
