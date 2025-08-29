@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -27,9 +28,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Role role;
+    @Column(name = "role")
+    private Set<Role> roles;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

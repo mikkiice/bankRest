@@ -1,3 +1,5 @@
 databaseChangeLog:
-  - include: { file: db/migration/001-refresh-tokens.yml }
-  - include: { file: db/migration/002-insert-initial-users.yml }
+  - include: { file: db/migration/002-users.yml }
+  - include: { file: db/migration/003-user-roles.yml }
+  - include: { file: db/migration/004-indexes.yml }
+  - include: { file: db/migration/006-insert-initial-users.yml }

@@ -1,31 +1,45 @@
 package com.example.bankcards.security;
 
+import com.example.bankcards.entity.Role;
 import com.example.bankcards.entity.User;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
-@RequiredArgsConstructor
+import java.util.Set;
+
+
+@Getter
 public class CustomUserDetails  implements UserDetails {
-    private final User user;
+    private final Long id;
+    private final String username;
+    private final String password;
+    private final Set<Role> roles;
+
+    public CustomUserDetails(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.roles = user.getRoles();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        return roles.stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r)).toList();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return username;
     }
 
     @Override
@@ -45,6 +59,6 @@ public class CustomUserDetails  implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 }

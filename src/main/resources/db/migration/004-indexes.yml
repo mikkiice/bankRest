@@ -1,0 +1,6 @@
+databaseChangeLog:
+  - changeSet:
+      id: auth-indexes
+      author: you
+      changes:
+        - createIndex: { tableName: users, columns: [ { name: username } ], indexName: idx_users_username }
