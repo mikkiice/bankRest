@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - include: { file: db/migration/001-refresh-tokens.yml }
+  - include: { file: db/migration/002-insert-initial-users.yml }

@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - preConditions:
+      onFail: MARK_RAN
+      preCondition:
+        - tableExists:
+            tableName: users
+
+  - changeSet:
+      id: 001-create-refresh-tokens
+      author: Myself
+      changes:
+        - createTable:
+            tableName: refresh_tokens
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_refresh_tokens
+              - column:
+                  name: jti
+                  type: VARCHAR(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expires_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: revoked
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+        - addUniqueConstraint:
+            tableName: refresh_tokens
+            columnNames: jti
+            constraintName: uk_refresh_token_jti
+
+        - addForeignKeyConstraint:
+            baseTableName: refresh_tokens
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            constraintName: fk_refresh_token_user
+
+        - createIndex:
+            tableName: refresh_tokens
+            indexName: idx_refresh_token_user
+            columns:
+              - column:
+                  name: user_id
+
+      rollback:
+        - dropTable:
+            tableName: refresh_tokens

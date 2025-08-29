@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - preConditions:
+      onFail: MARK_RAN
+      preCondition:
+        - tableExists:
+            tableName: users
+
+  - changeSet:
+      id: 002-insert-initial-users
+      author: bank
+      context: dev        # ← только для dev-окружения
+      changes:
+        # admin
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: username, value: "admin" }
+              - column: { name: password, value: "$2a$10$REPLACE_ADMIN_BCRYPT" }  # BCrypt
+              - column: { name: role,     value: "ADMIN" }
+
+        # user
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: username, value: "user" }
+              - column: { name: password, value: "$2a$10$REPLACE_USER_BCRYPT" }   # BCrypt
+              - column: { name: role,     value: "USER" }
+
+      rollback:
+        - delete:
+            tableName: users
+            where: "username in ('admin','user')"
